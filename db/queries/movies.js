@@ -1,42 +1,31 @@
 import db from "#db/client";
 
-/** @returns all movies in the database */
 export async function getMovies() {
-  const sql = `
-  SELECT *
-  FROM movies
-  `;
+  const sql = `SELECT * FROM movies`;
   const { rows: movies } = await db.query(sql);
   return movies;
 }
 
-/** @returns the movie created according to the provided details */
 export async function createMovie({ name, releaseDate, runningTime }) {
-  // TODO
+  const sql = `INSERT INTO movies (name, release_date, running_time) VALUES ($1, $2, $3) RETURNING *`;
+  const { rows: [movie] } = await db.query(sql, [name, releaseDate, runningTime]);
+  return movie;
 }
 
-// === Part 2 ===
-
-/**
- * @returns the movie with the given id
- * @returns undefined if movie with the given id does not exist
- */
 export async function getMovie(id) {
-  // TODO
+  const sql = `SELECT * FROM movies WHERE id = $1`;
+  const { rows: [movie] } = await db.query(sql, [id]);
+  return movie;
 }
 
-/**
- * @returns the updated movie with the given id
- * @returns undefined if movie with the given id does not exist
- */
 export async function updateMovie({ id, name, releaseDate, runningTime }) {
-  // TODO
+  const sql = `UPDATE movies SET name = $1, release_date = $2, running_time = $3 WHERE id = $4 RETURNING *`;
+  const { rows: [movie] } = await db.query(sql, [name, releaseDate, runningTime, id]);
+  return movie;
 }
 
-/**
- * @returns the deleted movie with the given id
- * @returns undefined if movie with the given id does not exist
- */
 export async function deleteMovie(id) {
-  // TODO
+  const sql = `DELETE FROM movies WHERE id = $1 RETURNING *`;
+  const { rows: [movie] } = await db.query(sql, [id]);
+  return movie;
 }

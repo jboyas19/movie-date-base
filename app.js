@@ -4,7 +4,8 @@ export default app;
 
 app.use(express.json());
 
-// TODO: route /movies to movies router
+import moviesRouter from "#api/movies";
+app.use("/movies", moviesRouter);
 
 app.use((err, req, res, next) => {
   console.error(err);
